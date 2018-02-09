@@ -1,5 +1,19 @@
-# nodejs-typescript-starter
-This is starter application of nodejs app in typescript language.
+# TypeScript 2 + Express + Node.js
 
-## Installation
- You can start by using the command `npm install && npm start`
+This is a repository to go with my article on creating an Express web application using TypeScript 2.
+
+## Install
+
+Install the node packages via:
+
+`$ npm install`
+
+And then run the grunt task to compile the TypeScript:
+
+`$ npm run grunt`
+
+## Starting
+
+To start the server run:
+
+`$ npm start`
