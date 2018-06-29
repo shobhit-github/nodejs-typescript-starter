@@ -5,12 +5,16 @@
 const server = require("../dist/server");
 const debug = require("debug")("express:server");
 const http = require("http");
+const socketConnect = require("socket.io");
 
 //create http server
 const httpPort = normalizePort(process.env.PORT || 4580);
 const app = server.Server.bootstrap().app;
 app.set("port", httpPort);
 const httpServer = http.createServer(app);
+
+// and support socket io
+exports.socket = socketConnect(httpServer).socket;
 
 //listen on provided ports
 httpServer.listen(httpPort);
@@ -74,5 +78,5 @@ function onError(error) {
 function onListening() {
   const addR = httpServer.address();
   const bind = typeof addR === "string" ? "pipe " + addR : "port " + addR.port;
-  console.log(`\n`, `***Server has been started successfully***` )
+  console.log('\n', '***Server has been started successfully -> PORT: ' + addR.port + ' ***' )
 }

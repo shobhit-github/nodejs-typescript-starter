@@ -4,12 +4,15 @@ import * as express from 'express';
 import * as logger from 'morgan';
 import * as path from 'path';
 import * as errorHandler from 'errorhandler';
+import * as methodOverride from 'method-override';
 import * as cors from 'cors';
-
+import * as mongoose from "mongoose"; //import mongoose
 
 /*  App dependencies
 -----------------------*/
-import {Configuration} from "./config";
+import AppRouter from "./routes";
+
+
 
 
 /**
@@ -60,9 +63,9 @@ export class Server {
      * @class Server
      * @method api
      */
-    public api() {
+    private api() {
 
-        this.app.use('/api', Configuration.apiRoutes )
+        this.app.use( '/', AppRouter )
     }
 
     /**
@@ -71,7 +74,9 @@ export class Server {
      * @class Server
      * @method config
      */
-    public config() {
+    private config() {
+
+        const MONGODB_CONNECTION: string = "mongodb://localhost:27017/beacon";
 
         // add static paths
         this.app.use(express.static(path.join(__dirname, 'public')));
@@ -81,25 +86,41 @@ export class Server {
         this.app.set('view engine', 'pug');
 
         // mount logger
-        this.app.use(logger(() => `development` ));
+        this.app.use(logger(() => `development`));
 
         // mount json form parser
         this.app.use(bodyParser.json());
 
         // mount query string parser
-        this.app.use(bodyParser.urlencoded({ extended: true }));
+        this.app.use(bodyParser.urlencoded({extended: true}));
 
         // mount cookie parser middleware
         this.app.use(cookieParser('SECRET_GOES_HERE'));
 
+        //mount override
+        // this.app.use(methodOverride());
+
+        //use q promises
+        global.Promise = require('q').Promise;
+        // mongoose.Promise = global.Promise;
+
         // catch 404 and forward to error handler
-        this.app.use( (err: any, req: express.Request, res: express.Response, next: express.NextFunction) => { err.status = 404; next(err); });
+        this.app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+            err.status = 404;
+            next(err);
+        });
+
+        //connect to mongoose
+        let connection: mongoose.Connection = mongoose.createConnection(MONGODB_CONNECTION);
+
 
         // Cross-Origin-Resource-Sharing headers configurations and api-routes
-        this.app.use( cors() );
+        this.app.use(cors());
 
         // error handling
         this.app.use(errorHandler());
+
+        //
     }
 
     /**

@@ -8,10 +8,14 @@ import {Request, Response} from "express";
 export class BaseController {
 
 
-  constructor() {
-    //initialize variables
+    constructor() {
+        //initialize variables
 
-  }
+    }
 
+
+    public baseDemoFunc = (): void => {
+        console.log('base called')
+    }
 
 }

@@ -1,4 +1,5 @@
-import {ApiRouting} from './routes';
+
+// import socket from '../../bin/www';
 
 /**
  * this class will provide the app configurations
@@ -7,14 +8,16 @@ import {ApiRouting} from './routes';
 export class Configuration {
 
 
-    public static apiRoutes = ApiRouting;
-
-
 
     constructor() {
         //initialize variables
-
     }
 
 
+    public demoFunction = (): void => {
+
+        // socket.emit()
+    }
+
 }
+
